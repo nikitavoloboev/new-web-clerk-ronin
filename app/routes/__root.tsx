@@ -1,11 +1,5 @@
 import type { QueryClient } from "@tanstack/react-query"
-import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/tanstack-start"
+import { ClerkProvider } from "@clerk/tanstack-start"
 import {
   Outlet,
   ScrollRestoration,
