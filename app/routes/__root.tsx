@@ -1,5 +1,12 @@
 import type { QueryClient } from "@tanstack/react-query"
 import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/tanstack-start"
+import {
   Outlet,
   ScrollRestoration,
   createRootRouteWithContext,
@@ -10,6 +17,7 @@ import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary"
 import { NotFound } from "~/components/NotFound"
 import { seo } from "~/lib/seo"
 import appCss from "~/styles/app.css?url"
+import { $fetchClerkAuth } from "~/actions/auth"
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient
@@ -51,6 +59,12 @@ export const Route = createRootRouteWithContext<{
       { rel: "icon", href: "/favicon.ico" },
     ],
   }),
+  beforeLoad: async () => {
+    const { user } = await $fetchClerkAuth()
+    return {
+      user,
+    }
+  },
   errorComponent: (props) => {
     return (
       <RootDocument>
@@ -64,9 +78,11 @@ export const Route = createRootRouteWithContext<{
 
 function RootComponent() {
   return (
-    <RootDocument>
-      <Outlet />
-    </RootDocument>
+    <ClerkProvider>
+      <RootDocument>
+        <Outlet />
+      </RootDocument>
+    </ClerkProvider>
   )
 }
 
